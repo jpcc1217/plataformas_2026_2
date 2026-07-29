@@ -25,6 +25,12 @@ public class ProductService {
         return products;
     }
 
+    public Product addProduct(String name, double price) {
+        Product newProduct = new Product(counter.incrementAndGet(), name, price);
+        products.add(newProduct);
+        return newProduct;
+    }
+
 
     
 }
