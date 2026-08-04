@@ -7,28 +7,38 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 
+import upb.prueba.clase.model.ProductRepository;
+
 @Service
 public class ProductService {
 
-    private final List<Product> products = new ArrayList<>();
+    private final ProductRepository productRepository;
 
-    private final AtomicLong counter = new AtomicLong();
-
-    public ProductService() {
-        // Agregar algunos productos de ejemplo
-        products.add(new Product(counter.incrementAndGet(), "Producto 1", 10.0));
-        products.add(new Product(counter.incrementAndGet(), "Producto 2", 20.0));
-        products.add(new Product(counter.incrementAndGet(), "Producto 3", 30.0));
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
+
+
+
+    // private final List<Product> products = new ArrayList<>();
+
+    // private final AtomicLong counter = new AtomicLong();
+
+    // public ProductService() {
+    //     // Agregar algunos productos de ejemplo
+    //     products.add(new Product(counter.incrementAndGet(), "Producto 1", 10.0));
+    //     products.add(new Product(counter.incrementAndGet(), "Producto 2", 20.0));
+    //     products.add(new Product(counter.incrementAndGet(), "Producto 3", 30.0));
+    // }
+
     public List<Product> getAllProducts() {
-        return products;
+        return productRepository.findAll();
     }
 
     public Product addProduct(String name, double price) {
-        Product newProduct = new Product(counter.incrementAndGet(), name, price);
-        products.add(newProduct);
-        return newProduct;
+        Product newProduct = new Product(name, price);
+        return productRepository.save(newProduct);
     }
 
 
