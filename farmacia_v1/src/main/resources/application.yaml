@@ -1,15 +1,32 @@
 spring:
   application:
     name: v1
+  docker:
+    compose:
+      enabled: false
 
-  datasource:
-    url: jdbc:postgresql://localhost:5432/farmaciadb
-    driverClassName: org.postgresql.Driver
-    username: postgres
-    password: password
     
+  # PostgreSQL
+  # datasource:
+  #   url: jdbc:postgresql://localhost:5432/farmaciadb
+  #   driverClassName: org.postgresql.Driver
+  #   username: postgres
+  #   password: password
+    
+  # jpa:
+  #   database-platform: org.hibernate.dialect.PostgreSQLDialect
+  #   hibernate:
+  #     ddl-auto: update
+  #   show-sql: true
+
+  # H2
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -17,4 +34,4 @@ spring:
 
 
 server:
-  port: 6001
+  port: 6002
