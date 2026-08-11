@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: Farmacia API V1
+  description: API REST para el sistema de inventario de farmacia.
+  version: 1.0.0
+servers:
+  - url: http://localhost:6002
+    description: Servidor Local
+paths:
+  /api/v1/medicamentos:
+    get:
+      summary: Obtener todos los medicamentos
+      responses:
+        '200':
+          description: Lista de medicamentos
+    post:
+      summary: Crear un nuevo medicamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Medicamento'
+      responses:
+        '201':
+          description: Medicamento creado exitosamente
+components:
+  schemas:
+    Medicamento:
+      type: object
+      properties:
+        nombre:
+          type: string
+        fechaExpedicion:
+          type: string
+          format: date-time
+        precio:
+          type: number
+          format: double
+        cantidad:
+          type: integer
+        categoria:
+          type: object
+          properties:
+            id:
+              type: integer
