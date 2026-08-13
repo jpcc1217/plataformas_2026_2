@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter @Setter
-public class MedicamenteRequestDTO {
+public class MedicamentoRequestDTO {
 
     @NotBlank(message = "El nombre del medicamento no puede estar vacío")
     private String nombre;
