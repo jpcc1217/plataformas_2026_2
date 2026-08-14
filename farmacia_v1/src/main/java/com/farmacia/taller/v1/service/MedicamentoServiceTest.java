@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import static org.mockito.Mockito.verify;
 
 import com.farmacia.taller.v1.dto.MedicamentoResponseDTO;
 import com.farmacia.taller.v1.model.Medicamento;
@@ -45,6 +46,7 @@ public class MedicamentoServiceTest {
         assertEquals(5.0, resultado.getPrecio());
 
         //verify
+        verify(medicamentoRepository, times(1)).findById(idTest);
 
 
 
