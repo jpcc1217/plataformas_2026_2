@@ -2,29 +2,41 @@ spring:
   application:
     name: v1
     
-  # PostgreSQL
+  # H2 Database
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    driverClassName: org.postgresql.Driver
-    username: postgres
-    password: admin
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 
     
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
 
-  # H2
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # PostgreSQL (Opcional - Descomentar si se usa contenedor Postgres local)
   # datasource:
-  #   url: jdbc:h2:mem:testdb
-  #   driverClassName: org.h2.Driver
-  #   username: sa
-  #   password: password
+  #   url: jdbc:postgresql://localhost:5432/postgres
+  #   driverClassName: org.postgresql.Driver
+  #   username: postgres
+  #   password: admin
   # jpa:
-  #   database-platform: org.hibernate.dialect.H2Dialect
+  #   database-platform: org.hibernate.dialect.PostgreSQLDialect
   #   hibernate:
   #     ddl-auto: update
   #   show-sql: true
+
+application:
+  security:
+    jwt:
+      secret-key: MI_SECRETO_HIPER_LARGO_PARA_JWT_DE_256_BITS_FARMACIA_SUPER_SEGURO
+      expiration: 86400000 # 24 horas en milisegundos
+
 server:
-  port: 6001
+  port: 6002

@@ -14,10 +14,10 @@ public class MedicamentoRequestDTO {
     @NotBlank(message = "El nombre del medicamento no puede estar vacío")
     private String nombre;
 
-    @NotNull(message = "La fecha de expedición no puede estar vacía")
-    private Date fechaExpedicion;
+    @NotNull(message = "La fecha de expiración no puede estar vacía")
+    private Date fechaExpiracion;
 
-    @Min(value = 1, message = "El precio del medicamento no puede ser negativo")
+    @Min(value = 1, message = "El precio del medicamento debe ser mayor o igual a 1")
     private double precio;
 
     @Min(value = 0, message = "La cantidad del medicamento no puede ser negativa")

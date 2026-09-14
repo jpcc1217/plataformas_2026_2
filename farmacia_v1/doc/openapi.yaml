@@ -1,46 +1,254 @@
 openapi: 3.0.3
 info:
   title: Farmacia API V1
-  description: API REST para el sistema de inventario de farmacia.
+  description: API REST para el sistema de inventario de farmacia (Spring Boot 4 / Java 25).
   version: 1.0.0
 servers:
   - url: http://localhost:6002
     description: Servidor Local
 paths:
-  /api/v1/medicamentos:
-    get:
-      summary: Obtener todos los medicamentos
-      responses:
-        '200':
-          description: Lista de medicamentos
+  /api/v1/auth/login:
     post:
-      summary: Crear un nuevo medicamento
+      summary: Iniciar sesión y obtener token JWT
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Medicamento'
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Autenticación exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Credenciales inválidas
+
+  /api/v1/auth/register:
+    post:
+      summary: Registrar usuario con rol especificado o ADMIN por defecto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '409':
+          description: Nombre de usuario ya registrado
+
+  /api/v1/auth/register-user:
+    post:
+      summary: Registrar usuario con rol USER (solo lectura)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRequest'
+      responses:
+        '200':
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '409':
+          description: Nombre de usuario ya registrado
+
+  /api/v1/medicamentos:
+    get:
+      summary: Obtener todos los medicamentos (Requiere ADMIN o USER)
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de medicamentos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MedicamentoResponseDTO'
+        '401':
+          description: No autenticado
+    post:
+      summary: Crear un nuevo medicamento (Requiere ADMIN)
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicamentoRequestDTO'
       responses:
         '201':
           description: Medicamento creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedicamentoResponseDTO'
+        '400':
+          description: Datos inválidos
+        '403':
+          description: Acceso denegado (requiere ADMIN)
+
+  /api/v1/medicamentos/{id}:
+    get:
+      summary: Obtener medicamento por ID (Requiere ADMIN o USER)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Medicamento encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedicamentoResponseDTO'
+        '404':
+          description: Medicamento no encontrado
+    put:
+      summary: Actualizar medicamento existente (Requiere ADMIN)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MedicamentoRequestDTO'
+      responses:
+        '200':
+          description: Medicamento actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MedicamentoResponseDTO'
+        '400':
+          description: Datos inválidos
+        '403':
+          description: Acceso denegado
+        '404':
+          description: Medicamento no encontrado
+    delete:
+      summary: Eliminar medicamento por ID (Requiere ADMIN)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Medicamento eliminado exitosamente
+        '403':
+          description: Acceso denegado
+        '404':
+          description: Medicamento no encontrado
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-    Medicamento:
+    AuthRequest:
       type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: admin123
+        role:
+          type: string
+          enum: [ADMIN, USER]
+          example: ADMIN
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+    MedicamentoRequestDTO:
+      type: object
+      required:
+        - nombre
+        - fechaExpiracion
+        - precio
+        - cantidad
+        - categoriaId
       properties:
         nombre:
           type: string
-        fechaExpedicion:
+          example: Amoxicilina 500mg
+        fechaExpiracion:
+          type: string
+          format: date
+          example: '2026-08-18'
+        precio:
+          type: number
+          format: double
+          minimum: 1
+          example: 18500.0
+        cantidad:
+          type: integer
+          minimum: 0
+          example: 50
+        categoriaId:
+          type: integer
+          format: int64
+          example: 1
+    MedicamentoResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nombre:
+          type: string
+          example: Amoxicilina 500mg
+        fechaExpiracion:
           type: string
           format: date-time
         precio:
           type: number
           format: double
+          example: 18500.0
         cantidad:
           type: integer
-        categoria:
-          type: object
-          properties:
-            id:
-              type: integer
+          example: 50
+        categoriaNombre:
+          type: string
+          example: Antibióticos

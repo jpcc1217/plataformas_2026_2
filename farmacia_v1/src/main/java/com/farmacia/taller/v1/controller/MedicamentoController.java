@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import com.farmacia.taller.v1.service.MedicamentoService;
 import java.util.List;
 
@@ -40,5 +42,19 @@ public class MedicamentoController {
     public ResponseEntity<List<MedicamentoResponseDTO>> obtenerTodosLosMedicamentos() {
         List<MedicamentoResponseDTO> medicamentos = medicamentoService.obtenerTodosLosMedicamentos();
         return new ResponseEntity<>(medicamentos, HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MedicamentoResponseDTO> actualizarMedicamento(
+            @PathVariable Long id,
+            @Valid @RequestBody MedicamentoRequestDTO request) {
+        MedicamentoResponseDTO response = medicamentoService.actualizarMedicamento(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarMedicamento(@PathVariable Long id) {
+        medicamentoService.eliminarMedicamento(id);
+        return ResponseEntity.noContent().build();
     }
 }

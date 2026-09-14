@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.farmacia.taller.v1.dto.MedicamentoResponseDTO;
 import com.farmacia.taller.v1.model.Medicamento;
 import com.farmacia.taller.v1.repository.MedicamentoRepository;
+import com.farmacia.taller.v1.repository.CategoriaRepository;
 
 import java.util.Optional;
 @ExtendWith(MockitoExtension.class)
@@ -21,6 +22,9 @@ public class MedicamentoServiceTest {
 
     @Mock
     private MedicamentoRepository medicamentoRepository;
+
+    @Mock
+    private CategoriaRepository categoriaRepository;
 
     @InjectMocks
     private MedicamentoService medicamentoService;

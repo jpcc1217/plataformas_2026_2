@@ -11,7 +11,7 @@ import java.util.Date;
 public class MedicamentoResponseDTO {
     private Long id;
     private String nombre;
-    private Date fechaExpedicion;
+    private Date fechaExpiracion;
     private double precio;
     private int cantidad;
     private String categoriaNombre;
