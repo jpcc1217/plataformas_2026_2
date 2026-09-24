@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block titulo %}Pedido registrado{% endblock %}
+{% block contenido %}
+<h1>Pedido registrado</h1>
+{% if ui == "v1" %}
+<table class="formulario">
+<tr><td>Número de radicado:</td><td><b id="lblRadicado">{{ pedido.radicado }}</b></td></tr>
+<tr><td>Referencia interna:</td><td>{{ pedido.referencia }}</td></tr>
+<tr><td>Medicamento:</td><td>{{ pedido.medicamento }}</td></tr>
+<tr><td>Cantidad:</td><td>{{ pedido.cantidad }}</td></tr>
+<tr><td>Proveedor:</td><td>{{ pedido.proveedor }}</td></tr>
+</table>
+<p><a href="/pedidos/nuevo">Registrar otro pedido</a></p>
+{% else %}
+<p class="resumen">Radicado <strong class="num-rad">{{ pedido.radicado }}</strong> para la referencia {{ pedido.referencia }}.</p>
+<p>{{ pedido.cantidad }} unidades de {{ pedido.medicamento }} a {{ pedido.proveedor }}.</p>
+<a class="boton-primario" href="/pedidos/nuevo">Registrar otro pedido</a>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block titulo %}Nuevo pedido{% endblock %}
+{% block contenido %}
+<h1>Registrar pedido a proveedor</h1>
+{% if ui == "v1" %}
+<div id="cargando">Cargando catálogo de medicamentos...</div>
+{% if error %}<p class="mensaje-error" role="alert">{{ error }}</p>{% endif %}
+<form id="frmPedido" method="post" action="/pedidos">
+<table class="formulario">
+<tr><td><label for="txtReferencia">Referencia interna</label></td><td><input id="txtReferencia" name="referencia" value="{{ valores.referencia or '' }}" disabled></td></tr>
+<tr><td><label for="txtCodigo">Código de medicamento</label></td><td><input id="txtCodigo" name="codigo" value="{{ valores.codigo or '' }}" disabled></td></tr>
+<tr><td><label for="txtCantidad">Cantidad</label></td><td><input id="txtCantidad" name="cantidad" value="{{ valores.cantidad or '' }}" disabled></td></tr>
+<tr><td><label for="cboProveedor">Proveedor</label></td><td><select id="cboProveedor" name="proveedor" disabled>
+<option value="">-- Seleccione --</option>
+{% for p in proveedores %}<option value="{{ p }}" {% if valores.proveedor == p %}selected{% endif %}>{{ p }}</option>{% endfor %}
+</select></td></tr>
+<tr><td></td><td><button id="btnRegistrar" type="submit" disabled>Registrar pedido</button></td></tr>
+</table>
+</form>
+<script>
+setTimeout(function () {
+  document.querySelectorAll("#frmPedido [disabled]").forEach(function (e) { e.disabled = false; });
+  document.getElementById("cargando").style.display = "none";
+}, {{ retardo_ms }});
+</script>
+{% else %}
+<p class="indicador-carga" data-cargando>Preparando formulario...</p>
+{% if error %}<div class="aviso-error" role="alert">{{ error }}</div>{% endif %}
+<form class="form-pedido" method="post" action="/pedidos">
+<fieldset disabled style="border:0;padding:0">
+<div class="campo"><label for="ref-int">Referencia interna</label><input id="ref-int" name="referencia" value="{{ valores.referencia or '' }}"></div>
+<div class="campo"><label for="cod-med">Código de medicamento</label><input id="cod-med" name="codigo" value="{{ valores.codigo or '' }}"></div>
+<div class="campo"><label for="cant-ped">Cantidad</label><input id="cant-ped" name="cantidad" type="text" inputmode="numeric" value="{{ valores.cantidad or '' }}"></div>
+<div class="campo"><label for="prov-sel">Proveedor</label><select id="prov-sel" name="proveedor">
+<option value="">Seleccione un proveedor</option>
+{% for p in proveedores %}<option value="{{ p }}" {% if valores.proveedor == p %}selected{% endif %}>{{ p }}</option>{% endfor %}
+</select></div>
+<button class="boton-primario" type="submit">Registrar pedido</button>
+</fieldset>
+</form>
+<script>
+setTimeout(function () {
+  document.querySelector(".form-pedido fieldset").disabled = false;
+  document.querySelector("[data-cargando]").remove();
+}, {{ retardo_ms }});
+</script>
+{% endif %}
+{% endblock %}

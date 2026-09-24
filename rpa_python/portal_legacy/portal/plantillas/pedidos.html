@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block titulo %}Consulta de pedidos{% endblock %}
+{% block contenido %}
+<h1>Consulta de pedidos</h1>
+<form method="get" action="/pedidos">
+<label for="{{ 'txtBuscar' if ui == 'v1' else 'buscar-ref' }}">Buscar por referencia</label>
+<input id="{{ 'txtBuscar' if ui == 'v1' else 'buscar-ref' }}" name="referencia" value="{{ referencia }}">
+<button type="submit" {% if ui == "v2" %}class="boton-primario"{% endif %}>Buscar</button>
+</form>
+<table class="{{ 'datos' if ui == 'v1' else 'tabla' }}">
+<thead><tr><th>Radicado</th><th>Referencia</th><th>Medicamento</th><th>Cantidad</th><th>Proveedor</th><th>Fecha</th></tr></thead>
+<tbody>
+{% for p in pedidos %}
+<tr><td>{{ p.radicado }}</td><td>{{ p.referencia }}</td><td>{{ p.medicamento }}</td><td>{{ p.cantidad }}</td><td>{{ p.proveedor }}</td><td>{{ p.registrado_en.strftime("%Y-%m-%d %H:%M:%S") }}</td></tr>
+{% else %}
+<tr><td colspan="6">No hay pedidos registrados</td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}
