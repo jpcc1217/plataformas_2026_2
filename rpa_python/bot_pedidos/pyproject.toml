@@ -1,0 +1,12 @@
+[project]
+name = "bot-pedidos"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "openpyxl>=3.1.5",
+    "playwright>=1.63.0",
+    "python-dotenv>=1.2.3",
+    "tenacity>=9.1.4",
+]
