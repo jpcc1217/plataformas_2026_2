@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block titulo %}Consulta de novedades{% endblock %}
+{% block contenido %}
+<h1>Consulta de novedades</h1>
+<form method="get" action="/novedades">
+<label for="{{ 'txtBuscarSol' if ui == 'v1' else 'buscar-sol' }}">Buscar por número de solicitud</label>
+<input id="{{ 'txtBuscarSol' if ui == 'v1' else 'buscar-sol' }}" name="solicitud" value="{{ solicitud }}">
+<button type="submit" {% if ui == "v2" %}class="btn"{% endif %}>Buscar</button>
+</form>
+<table class="{{ 'grilla' if ui == 'v1' else 'tabla-nov' }}">
+<thead><tr><th>Resolución</th><th>Solicitud</th><th>Cédula</th><th>Funcionario</th><th>Tipo</th><th>Fecha inicio</th><th>Días</th><th>Registrada</th></tr></thead>
+<tbody>
+{% for n in novedades %}
+<tr><td>{{ n.resolucion }}</td><td>{{ n.solicitud }}</td><td>{{ n.cedula }}</td><td>{{ n.funcionario }}</td><td>{{ n.tipo }}</td><td>{{ n.fecha_inicio.strftime("%d/%m/%Y") }}</td><td>{{ n.dias }}</td><td>{{ n.registrada_en.strftime("%Y-%m-%d %H:%M:%S") }}</td></tr>
+{% else %}
+<tr><td colspan="8">No hay novedades registradas</td></tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

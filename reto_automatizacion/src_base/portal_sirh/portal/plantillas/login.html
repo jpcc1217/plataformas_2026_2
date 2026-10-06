@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block titulo %}Ingreso{% endblock %}
+{% block contenido %}
+<h1>Ingreso a SIRH</h1>
+{% if ui == "v1" %}
+{% if error %}<p class="error-sirh" role="alert">{{ error }}</p>{% endif %}
+<form id="frmIngreso" method="post" action="/login">
+<table class="campos">
+<tr><td><label for="txtUsuarioRed">Usuario de red</label></td><td><input id="txtUsuarioRed" name="usuario" type="text"></td></tr>
+<tr><td><label for="txtClave">Clave</label></td><td><input id="txtClave" name="clave" type="password"></td></tr>
+<tr><td></td><td><button id="btnIniciar" type="submit">Iniciar sesión</button></td></tr>
+</table>
+</form>
+{% else %}
+{% if error %}<div class="msg" role="alert">{{ error }}</div>{% endif %}
+<form class="ingreso-rh" method="post" action="/login">
+<div class="fila-form"><label for="u-red">Usuario de red</label><input id="u-red" name="usuario" autocomplete="username"></div>
+<div class="fila-form"><label for="c-red">Clave</label><input id="c-red" name="clave" type="password" autocomplete="current-password"></div>
+<button class="btn" type="submit">Iniciar sesión</button>
+</form>
+{% endif %}
+{% endblock %}

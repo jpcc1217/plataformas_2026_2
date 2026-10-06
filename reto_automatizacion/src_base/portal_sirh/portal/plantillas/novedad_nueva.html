@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block titulo %}Nueva novedad{% endblock %}
+{% block contenido %}
+<h1>Registrar novedad de personal</h1>
+{% if ui == "v1" %}
+<div id="consultando">Consultando saldos de vacaciones...</div>
+{% if error %}<p class="error-sirh" role="alert">{{ error }}</p>{% endif %}
+<form id="frmNovedad" method="post" action="/novedades">
+<table class="campos">
+<tr><td><label for="txtSolicitud">Número de solicitud</label></td><td><input id="txtSolicitud" name="solicitud" value="{{ valores.solicitud or '' }}" disabled></td></tr>
+<tr><td><label for="txtCedula">Cédula del funcionario</label></td><td><input id="txtCedula" name="cedula" value="{{ valores.cedula or '' }}" disabled></td></tr>
+<tr><td><label for="cboTipo">Tipo de novedad</label></td><td><select id="cboTipo" name="tipo" disabled>
+<option value="">-- Seleccione --</option>
+{% for codigo, nombre in tipos.items() %}<option value="{{ codigo }}" {% if valores.tipo == codigo %}selected{% endif %}>{{ nombre }}</option>{% endfor %}
+</select></td></tr>
+<tr><td><label for="txtFechaIni">Fecha de inicio</label></td><td><input id="txtFechaIni" name="fecha" placeholder="dd/mm/aaaa" value="{{ valores.fecha or '' }}" disabled></td></tr>
+<tr><td><label for="txtDias">Días hábiles</label></td><td><input id="txtDias" name="dias" value="{{ valores.dias or '' }}" disabled></td></tr>
+<tr><td></td><td><button id="btnRegistrarNov" type="submit" disabled>Registrar novedad</button></td></tr>
+</table>
+</form>
+<script>
+setTimeout(function () {
+  document.querySelectorAll("#frmNovedad [disabled]").forEach(function (e) { e.disabled = false; });
+  document.getElementById("consultando").style.display = "none";
+}, {{ retardo_ms }});
+</script>
+{% else %}
+<p class="cargando" data-cargando>Actualizando saldos...</p>
+{% if error %}<div class="msg" role="alert">{{ error }}</div>{% endif %}
+<form class="form-novedad" method="post" action="/novedades">
+<fieldset disabled style="border:0;padding:0">
+<div class="fila-form"><label for="n-ced">Cédula del funcionario</label><input id="n-ced" name="cedula" inputmode="numeric" value="{{ valores.cedula or '' }}"></div>
+<div class="fila-form"><label for="n-tipo">Tipo de novedad</label><select id="n-tipo" name="tipo">
+<option value="">Elija el tipo de novedad</option>
+{% for codigo, nombre in tipos.items() %}<option value="{{ codigo }}" {% if valores.tipo == codigo %}selected{% endif %}>{{ nombre }}</option>{% endfor %}
+</select></div>
+<div class="fila-form"><label for="n-ini">Fecha de inicio</label><input id="n-ini" name="fecha" placeholder="dd/mm/aaaa" value="{{ valores.fecha or '' }}"></div>
+<div class="fila-form"><label for="n-dias">Días hábiles</label><input id="n-dias" name="dias" inputmode="numeric" value="{{ valores.dias or '' }}"></div>
+<div class="fila-form"><label for="n-sol">Número de solicitud</label><input id="n-sol" name="solicitud" value="{{ valores.solicitud or '' }}"></div>
+<button class="btn" type="submit">Registrar novedad</button>
+</fieldset>
+</form>
+<script>
+setTimeout(function () {
+  document.querySelector(".form-novedad fieldset").disabled = false;
+  document.querySelector("[data-cargando]").remove();
+}, {{ retardo_ms }});
+</script>
+{% endif %}
+{% endblock %}

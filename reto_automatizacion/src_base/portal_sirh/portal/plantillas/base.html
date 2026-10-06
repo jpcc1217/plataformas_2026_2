@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>{% block titulo %}{% endblock %} | SIRH</title>
+<style>
+{% if ui == "v1" %}
+body { font-family: Arial, Helvetica, sans-serif; font-size: 12px; background: #b9c4d6; margin: 0; }
+#barraSirh { background: #1f3a68; color: #fff; padding: 6px 12px; font-weight: bold; }
+#barraSirh a { color: #ffd966; margin-left: 12px; }
+#marco { background: #fff; border: 1px solid #1f3a68; margin: 16px auto; padding: 16px; width: 660px; }
+table.campos td { padding: 4px 6px; }
+table.grilla { border-collapse: collapse; width: 100%; }
+table.grilla th, table.grilla td { border: 1px solid #7f8fa9; padding: 3px 6px; }
+table.grilla th { background: #dbe3ef; }
+.error-sirh { color: #b00000; font-weight: bold; }
+#consultando { background: #fff2cc; border: 1px dashed #7f6000; padding: 4px; margin-bottom: 8px; }
+{% else %}
+body { font-family: system-ui, sans-serif; background: #f0fdf4; margin: 0; color: #14532d; }
+.top { display: flex; justify-content: space-between; background: #15803d; color: #fff; padding: 14px 32px; }
+.top a { color: #fff; margin-left: 20px; text-decoration: none; }
+.hoja { background: #fff; max-width: 740px; margin: 32px auto; padding: 28px 36px; border-radius: 14px; box-shadow: 0 6px 24px rgba(20, 83, 45, .08); }
+.fila-form { display: flex; flex-direction: column; margin-bottom: 14px; }
+.fila-form input, .fila-form select { padding: 8px 10px; border: 1px solid #bbf7d0; border-radius: 8px; }
+.btn { background: #15803d; color: #fff; border: 0; padding: 10px 18px; border-radius: 8px; cursor: pointer; text-decoration: none; }
+.msg { background: #fef3c7; color: #92400e; padding: 10px 14px; border-radius: 8px; }
+.tabla-nov { border-collapse: collapse; width: 100%; }
+.tabla-nov th, .tabla-nov td { border-bottom: 1px solid #dcfce7; padding: 8px; text-align: left; }
+.cargando { color: #15803d; margin-bottom: 12px; }
+{% endif %}
+</style>
+</head>
+<body>
+{% if ui == "v1" %}
+<div id="barraSirh">SIRH 5.1 - Sistema de Información de Recursos Humanos
+{% if autenticado %}<a href="/novedades/nueva">Registrar novedad</a><a href="/novedades">Consultar novedades</a><a href="/salir">Cerrar sesión</a>{% endif %}
+</div>
+<div id="marco">{% block contenido %}{% endblock %}</div>
+{% else %}
+<header class="top"><span>Talento humano</span>
+{% if autenticado %}<nav><a href="/novedades/nueva">Registrar novedad</a><a href="/novedades">Consultar novedades</a><a href="/salir">Cerrar sesión</a></nav>{% endif %}
+</header>
+<main class="hoja">{{ self.contenido() }}</main>
+{% endif %}
+</body>
+</html>

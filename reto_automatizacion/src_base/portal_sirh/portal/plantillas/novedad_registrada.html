@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block titulo %}Novedad registrada{% endblock %}
+{% block contenido %}
+<h1>Novedad registrada</h1>
+{% if ui == "v1" %}
+<table class="campos">
+<tr><td>Resolución:</td><td><b id="lblResolucion">{{ novedad.resolucion }}</b></td></tr>
+<tr><td>Solicitud:</td><td>{{ novedad.solicitud }}</td></tr>
+<tr><td>Funcionario:</td><td>{{ novedad.funcionario }} ({{ novedad.cedula }})</td></tr>
+<tr><td>Novedad:</td><td>{{ novedad.tipo }}, {{ novedad.dias }} días desde {{ novedad.fecha_inicio.strftime("%d/%m/%Y") }}</td></tr>
+</table>
+<p><a href="/novedades/nueva">Registrar otra novedad</a></p>
+{% else %}
+<p>Se expidió la resolución <strong class="num-res">{{ novedad.resolucion }}</strong> para {{ novedad.funcionario }}: {{ novedad.tipo | lower }}, {{ novedad.dias }} días.</p>
+<a class="btn" href="/novedades/nueva">Registrar otra novedad</a>
+{% endif %}
+{% endblock %}
